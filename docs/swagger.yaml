@@ -1,0 +1,113 @@
+openapi: 3.0.0
+info:
+  title: Personal Skill Tracker API
+  description: API for tracking skill development and practice logs
+  version: "1.0"
+paths:
+  /register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User created
+
+  /login:
+    post:
+      summary: Authenticate user and return a JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: JWT token returned
+
+  /skills:
+    get:
+      summary: Get all skills
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A list of skills
+    post:
+      summary: Create a new skill
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                level:
+                  type: string
+                targetHours:
+                  type: integer
+                userId:
+                  type: integer
+      responses:
+        '201':
+          description: Skill created
+
+  /logs:
+    get:
+      summary: Get all practice logs
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A list of logs
+    post:
+      summary: Create a new practice log
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                skillId:
+                  type: integer
+                date:
+                  type: string
+                  format: date-time
+                duration:
+                  type: integer
+                notes:
+                  type: string
+      responses:
+        '201':
+          description: Log created
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
